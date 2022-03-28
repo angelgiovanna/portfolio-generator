@@ -1,10 +1,11 @@
 const inquirer = require('inquirer');
-// const fs = require('fs');
-// const generatePage = require('./src/page-template.js');
+const fs = require('fs');
+const generatePage = require('./src/page-template.js');
 
 // const pageHTML = generatePage(angel, angelgiovanna);
 
 const promptUser = () => {
+  
   return inquirer.prompt([
       {
         type: 'input',
@@ -19,6 +20,7 @@ const promptUser = () => {
           }
         }
     },
+
     {
       type:'input',
       name: 'github',
@@ -32,12 +34,14 @@ const promptUser = () => {
         }
       }
     },
+
     {
       type: 'confirm',
       name: 'confirmAbout',
       message:'Would you like to enter some information about yourself for an "About" section?',
       default: true
     },
+    
     {
       type:'input',
       name:'about',
@@ -82,17 +86,20 @@ const promptProject = portfolioData => {
         }
       }
     },
+
     {
       type:'input',
       name:'description',
       message:'Provide a description of the project (Required)'
     },
+
     {
       type:'checkbox',
       name:'languages',
       message:'What did you build this project with? (Check all that apply)',
       choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
     },
+
     {
       type:'input',
       name:'link',
@@ -106,12 +113,14 @@ const promptProject = portfolioData => {
         }
       }
     },
+
     {
       type:'confirm',
       name:'feature',
       message:'Would you like to feature this project?',
       default: false
     },
+
     {
       type: 'confirm',
       name: 'confirmAddProject',
@@ -125,7 +134,13 @@ const promptProject = portfolioData => {
 promptUser()
 .then(promptProject)
 .then(portfolioData => {
-  console.log(portfolioData);
+    const pageHTML = generatePage(portfolioData);
+
+     fs.writeFile('./index.html', pageHTML, err => {
+      if (err) throw new Error(err);
+
+       console.log('Page created! Check out index.html in this directory to see it!');
+     });
 });
 
 
